@@ -15,5 +15,5 @@ for i in range(inicio,fin+1):
 
 ventas = pd.Series(ventas)
 
-print('Ventas\n ', ventas)
+print('Ventas\n', ventas)
 print('Ventas con decuento\n', ventas*0.9)
