@@ -23,30 +23,34 @@ df.columns = ['x', 'y']
 print("Coordenadas de los puntos")
 print(df)
 
-def Caldistancias(puntos):
+def calcular_distancia(df, tipo='euclidean'):
     distancias = pd.DataFrame(index=df.index, columns=df.index)
-    #Calculo de las distancias
     for i in df.index:
         for k in df.index:
             if i!=k:
-                distancias.loc[i, k] = distance.euclidean(df.loc[i], df.loc[k])
-            else :
+                if tipo == 'euclidean':
+                    distancias.loc[i, k] = distance.euclidean(df.loc[i], df.loc[k])
+                elif tipo == 'manhattan':
+                    distancias.loc[i, k] = distance.cityblock(df.loc[i], df.loc[k])
+                elif tipo == 'chebyshev':
+                    distancias.loc[i, k] = distance.chebyshev(df.loc[i], df.loc[k])
+            else:
                 distancias.loc[i, k] = 0
     return distancias
-distancias = Caldistancias(puntos)
-valor_max = distancias.values.max()
 
-(punto1, punto2) = distancias.stack().idxmax()
+# Calculamos las tres distancias
+print("\n=== DISTANCIA EUCLIDIANA ===")
+distancias_euclidean = calcular_distancia(df, 'euclidean')
+valor_max = distancias_euclidean.values.max()
+punto1, punto2 = distancias_euclidean.stack().idxmax()
+print("\nMatriz de distancias euclidianas:")
+print(distancias_euclidean)
+print('Distancia euclidiana máxima:', valor_max)
+print('Entre el punto:', punto1, 'y el punto:', punto2)
 
-print("tabala de distancias")
-print(distancias)
-print('Distacia maxima: ', valor_max)
-print('Entre el punto: ', punto1, ' y el punto: ', punto2)
-
-#De otra manera
-max_Value = distancias.max().max()
-#obtener la columna del valor maximo
-max_Column = distancias.max().idxmax()
-#obtener el indice del valor maximo
-max_Index = distancias[max_Column].idxmax()
-print('Distacia maxima: ', max_Value)
+print("\n=== DISTANCIA MANHATTAN ===")
+distancias_manhattan = calcular_distancia(df, 'manhattan')
+valor_max = distancias_manhattan.values.max()
+punto1, punto2 = distancias_manhattan.stack().idxmax()
+print("\nMatriz de distancias manhattan:")
+print(distancias_manhattan)
